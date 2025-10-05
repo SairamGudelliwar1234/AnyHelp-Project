@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AnyHelp.com</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1f1f1f 0%, #2c2c2c 100%);
+      color: #e5e5e5;
+      min-height: 100vh;
+    }
+
+    /* Top site header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(32,32,32,0.8);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .site-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.75rem 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: radial-gradient(circle at 30% 30%, #8b5cf6, #4f46e5 60%, #312e81);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.06) inset, 0 6px 18px rgba(79,70,229,0.35);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+    .brand-logo span { font-weight: 800; }
+    .site-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .site-actions .mini-btn {
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: #e5e5e5;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .login-page, .dashboard, .problem-page {
+      display: none;
+      padding: 2rem;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .active {
+      display: block;
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: 10vh auto;
+      background: rgba(44, 44, 44, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 2.5rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      background: rgba(255,255,255,0.06);
+      padding: 0.5rem;
+      border-radius: 0.75rem;
+    }
+
+    .auth-tab {
+      padding: 0.6rem 0.8rem;
+      text-align: center;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      color: #ddd;
+    }
+
+    .auth-tab.active {
+      background: linear-gradient(45deg, #6366f1, #4f46e5);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(99,102,241,0.35);
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+      background: linear-gradient(45deg, #6366f1, #4f46e5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    input, button, textarea {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 1rem;
+      background-color: rgba(58, 58, 58, 0.5);
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #bbb;
+    }
+
+    button {
+      background: linear-gradient(45deg, #6366f1, #4f46e5);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      margin-top: 1.5rem;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .dashboard {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .dashboard h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, #6366f1, #4f46e5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .dashboard p {
+      font-size: 1.1rem;
+      color: #bbb;
+      margin-bottom: 2rem;
+    }
+
+    .problems {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .problem-card {
+      background: rgba(44, 44, 44, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(50px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .problem-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .problem-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .problem-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      background-color: rgba(44, 44, 44, 0.5);
+      padding: 1rem;
+      border-radius: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .problem-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .problem-content {
+      padding: 1.5rem;
+    }
+
+    .problem-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .problem-content p {
+      color: #bbb;
+      line-height: 1.6;
+    }
+
+    .solution-section {
+      margin-top: 2rem;
+      background: rgba(44, 44, 44, 0.8);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .subtype-section {
+      margin: 1rem 0 2rem;
+      background: rgba(44,44,44,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 1rem;
+      padding: 1rem;
+    }
+    .subtype-chips { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.75rem }
+    .subtype-chip {
+      padding: 0.5rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: #e5e5e5;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .subtype-chip.active { background: linear-gradient(45deg, #6366f1, #4f46e5); border-color: transparent }
+
+    .solution-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(45deg, #6366f1, #4f46e5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .solution-section ul {
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .solution-section ul li {
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      position: relative;
+      padding-left: 2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: rgba(44, 44, 44, 0.5);
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .solution-section ul li i {
+      color: #6366f1;
+      font-size: 1.2rem;
+      margin-top: 0.2rem;
+    }
+
+    .solution-section ul li span {
+      flex: 1;
+    }
+
+    .back-button {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: linear-gradient(135deg, rgba(99,102,241,0.95), rgba(79,70,229,0.95));
+      backdrop-filter: blur(10px);
+      padding: 0;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      border: none;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      width: 40px;
+      height: 40px;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .back-button:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .back-button i { font-size: 1.2rem; color: white; }
+    .back-button span { display: none; }
+
+    .feedback-message {
+      position: fixed;
+      top: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(46, 204, 113, 0.9);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      display: none;
+      animation: slideIn 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    .feedback-message i {
+      margin-right: 0.5rem;
+    }
+
+    .review-section {
+      margin-top: 3rem;
+      background: rgba(44, 44, 44, 0.8);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .review-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(45deg, #6366f1, #4f46e5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .rating-stars i {
+      color: #6366f1;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .rating-stars i:hover {
+      transform: scale(1.2);
+    }
+
+    .video-session {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(99, 102, 241, 0.1);
+      border-radius: 1rem;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .video-session a {
+      color: #6366f1;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .video-session a:hover {
+      color: #4f46e5;
+      text-decoration: underline;
+    }
+
+    .therapy-page {
+      display: none;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .therapy-page.active {
+      display: block;
+    }
+
+    .therapist-card {
+      background: rgba(44, 44, 44, 0.8);
+      border-radius: 1rem;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .therapist-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .therapist-image {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 1rem 1rem 0 0;
+      background-color: rgba(44, 44, 44, 0.5);
+      padding: 1rem;
+    }
+
+    .therapist-info {
+      padding: 1.5rem;
+    }
+
+    .therapist-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .therapist-specialty {
+      color: #6366f1;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .therapist-price {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .therapist-description {
+      color: #bbb;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .book-button {
+      background: linear-gradient(45deg, #6366f1, #4f46e5);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .book-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .solution-card {
+      background: rgba(44, 44, 44, 0.8);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .solution-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .solution-card h3 {
+      color: #6366f1;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .solution-card ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 1rem;
+    }
+
+    .solution-card ul li {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #bbb;
+    }
+
+    .solution-card ul li i {
+      color: #6366f1;
+    }
+
+    .references-section {
+      margin-top: 3rem;
+      background: rgba(44, 44, 44, 0.8);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .references-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .reference-card {
+      background: rgba(44, 44, 44, 0.5);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .reference-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .reference-card h4 {
+      color: #6366f1;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .reference-card p {
+      color: #bbb;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .reference-link {
+      color: #6366f1;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .reference-link:hover {
+      color: #4f46e5;
+      text-decoration: underline;
+    }
+
+    /* Chatbot */
+    .chatbot-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 420px;
+      height: 600px;
+      background: rgba(32, 33, 35, 0.98);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      display: none;
+      z-index: 1100;
+      flex-direction: column;
+    }
+
+    .chatbot-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .chatbot-header-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .chatbot-logo {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: radial-gradient(circle at 30% 30%, #a78bfa, #6366f1 60%, #3730a3);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+    }
+
+    .chatbot-body {
+      flex: 1;
+      padding: 1.25rem;
+      overflow-y: auto;
+      background: rgba(32, 33, 35, 1);
+    }
+
+    .chatbot-body::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chatbot-body::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .chatbot-body::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.5);
+      border-radius: 3px;
+    }
+
+    .chatbot-msg {
+      margin-bottom: 1.25rem;
+      animation: fadeInMsg 0.3s ease;
+    }
+
+    @keyframes fadeInMsg {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chatbot-msg.user {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .chatbot-msg.bot {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .chatbot-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+
+    .chatbot-msg .bubble {
+      display: inline-block;
+      padding: 0.875rem 1rem;
+      border-radius: 1rem;
+      line-height: 1.6;
+      max-width: 85%;
+      word-wrap: break-word;
+    }
+
+    .chatbot-msg.bot .bubble {
+      background: rgba(52, 53, 65, 0.9);
+      color: #ececf1;
+      border: 1px solid rgba(255,255,255,0.1);
+      text-align: left;
+    }
+
+    .chatbot-msg.user .bubble {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+      border: none;
+    }
+
+    .chatbot-controls {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      background: rgba(32, 33, 35, 1);
+    }
+
+    .chatbot-input-wrapper {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      background: rgba(64, 65, 79, 0.8);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .chatbot-input-wrapper:focus-within {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+
+    .chatbot-controls input {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      background: transparent;
+      color: #ececf1;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .chatbot-controls input::placeholder {
+      color: rgba(236, 236, 241, 0.5);
+    }
+
+    .chatbot-send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 0.5rem;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .chatbot-send-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .chatbot-send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 0.3rem;
+      padding: 0.875rem 1rem;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(99, 102, 241, 0.6);
+      animation: typingBounce 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-10px); }
+    }
+
+    .chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #6366f1, #4f46e5);
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      box-shadow: 0 10px 28px rgba(99,102,241,0.35);
+      z-index: 1101;
+      cursor: pointer;
+    }
+
+    .chatbot-toggle:hover { transform: translateY(-2px) }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="brand">
+        <div class="brand-logo"><span>A</span></div>
+        <span>AnyHelp</span>
+      </div>
+      <div class="site-actions">
+        <button class="mini-btn" onclick="document.querySelector('.dashboard').scrollIntoView({behavior:'smooth'})">Explore</button>
+        <button class="mini-btn" onclick="toggleChatbot(true)"><i class="fas fa-comments"></i></button>
+      </div>
+    </div>
+  </header>
+  <!-- Login Page -->
+  <div class="login-page active">
+    <div class="login-container">
+      <h2>Welcome to AnyHelp.com</h2>
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Login</div>
+        <div class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Register</div>
+      </div>
+
+      <div id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Username" />
+        <input type="password" id="loginPassword" placeholder="Password" />
+        <button onclick="login()">Login</button>
+      </div>
+
+      <div id="registerForm" style="display:none">
+        <input type="text" id="regUsername" placeholder="Choose a username" />
+        <input type="email" id="regEmail" placeholder="Email" />
+        <input type="password" id="regPassword" placeholder="Create a password" />
+        <button onclick="register()">Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Page -->
+  <div class="dashboard">
+    <h1>Welcome to AnyHelp.com</h1>
+    <p>Select a problem to explore resources and support.</p>
+    <div class="problems" id="problems"></div>
+  </div>
+
+  <!-- Problem Details Page -->
+  <div class="problem-page" id="problemPage">
+    <button class="back-button" onclick="goBack()">⬅</button>
+    <div id="problemContent"></div>
+  </div>
+
+  <!-- Therapy Page -->
+  <div class="therapy-page">
+    <h2>Available Therapists</h2>
+    <div class="therapists-grid">
+      <!-- Therapist cards will be dynamically added here -->
+    </div>
+    <button class="back-button" onclick="goBackToProblem()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+
+  <!-- Payment Selection Page -->
+  <div id="paymentPage" style="display:none; padding:2rem; max-width:900px; margin:0 auto">
+    <button class="back-button" onclick="closePaymentPage()"><i class="fas fa-arrow-left"></i> Back</button>
+    <h2 style="font-size: 2.2rem; margin-bottom: 1rem; background: linear-gradient(45deg, #6366f1, #4f46e5); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Select a payment method</h2>
+    <div id="paymentSummary" style="margin-bottom:1rem; color:#bbb"></div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:1rem">
+      <div style="background: rgba(44, 44, 44, 0.8); border:1px solid rgba(255,255,255,0.1); border-radius:1rem; padding:1rem">
+        <h3 style="margin-bottom:0.5rem">Razorpay</h3>
+        <p style="color:#bbb; font-size:0.95rem">UPI, cards, wallets (India). Uses your runtime key.</p>
+        <button onclick="payWithRazorpay()">Pay with Razorpay</button>
+      </div>
+      <div style="background: rgba(44, 44, 44, 0.8); border:1px solid rgba(255,255,255,0.1); border-radius:1rem; padding:1rem">
+        <h3 style="margin-bottom:0.5rem">PayPal (Sandbox)</h3>
+        <p style="color:#bbb; font-size:0.95rem">Use a sandbox client ID. Card sandbox available.</p>
+        <div style="display:flex; gap:0.5rem; align-items:center">
+          <input id="paypalClientId" placeholder="PayPal Sandbox Client ID" />
+          <button style="width:auto; padding:0.6rem 0.8rem" onclick="savePaypalClientId()">Save</button>
+        </div>
+        <div id="paypalButtons" style="margin-top:0.75rem"></div>
+      </div>
+      <div style="background: rgba(44, 44, 44, 0.8); border:1px solid rgba(255,255,255,0.1); border-radius:1rem; padding:1rem">
+        <h3 style="margin-bottom:0.5rem">Card (Test)</h3>
+        <p style="color:#bbb; font-size:0.95rem">No gateway. Simulates success/failure for demos.</p>
+        <button onclick="simulatePayment('success')">Simulate Success</button>
+        <button style="background:#ef4444; margin-top:0.5rem" onclick="simulatePayment('cancel')">Simulate Failure</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Result Pages -->
+  <div id="paymentSuccess" style="display:none; padding:2rem; max-width:800px; margin:0 auto; text-align:center">
+    <i class="fas fa-check-circle" style="font-size:3rem; color:#22c55e"></i>
+    <h2 style="margin-top:1rem">Payment successful</h2>
+    <p id="paymentSuccessMsg" style="color:#bbb; margin-top:0.5rem"></p>
+    <button style="max-width:280px; margin:1rem auto 0" onclick="goToDashboard()">Back to dashboard</button>
+  </div>
+  <div id="paymentCancel" style="display:none; padding:2rem; max-width:800px; margin:0 auto; text-align:center">
+    <i class="fas fa-times-circle" style="font-size:3rem; color:#ef4444"></i>
+    <h2 style="margin-top:1rem">Payment not completed</h2>
+    <p id="paymentCancelMsg" style="color:#bbb; margin-top:0.5rem"></p>
+    <button style="max-width:280px; margin:1rem auto 0" onclick="reopenPayment()">Try again</button>
+  </div>
+
+  <!-- Chatbot Toggle and Widget -->
+  <button class="chatbot-toggle" id="chatbotToggle"><i class="fas fa-comments"></i></button>
+  <div class="chatbot-widget" id="chatbotWidget">
+    <div class="chatbot-header">
+      <span class="chatbot-header-title"><span class="chatbot-logo">A</span> AnyHelp Assistant</span>
+      <button style="background: transparent; border: none; color: #fff; cursor: pointer" onclick="toggleChatbot(false)"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="chatbot-body" id="chatbotBody"></div>
+    <div class="chatbot-controls">
+      <select id="solutionType">
+        <option value="practical">Practical steps</option>
+        <option value="emotional">Emotional support</option>
+        <option value="professional">Professional guidance</option>
+      </select>
+      <input id="chatInput" placeholder="Describe your problem..." onkeydown="if(event.key==='Enter'){sendChat()}" />
+      <button onclick="sendChat()">Send</button>
+    </div>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD" data-namespace="paypalFallback"></script>
+  <script>
+    const problems = [
+      {
+        title: "Financial Problem",
+        description: "Facing financial stress can affect every part of your life. Explore practical tools, budgeting ideas, and emotional support resources to manage financial worries effectively.",
+        image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        subtypes: [
+          { name: 'Budgeting', include: ['Budget Planning','Emergency Fund'] },
+          { name: 'Debt', include: ['Debt Management'] },
+          { name: 'All', include: [] }
+        ],
+        solutions: [
+          {
+            title: "Budget Planning",
+            description: "Create a detailed monthly budget to track income and expenses. Use the 50/30/20 rule: 50% for needs, 30% for wants, and 20% for savings.",
+            steps: [
+              "List all sources of income",
+              "Track all monthly expenses",
+              "Categorize expenses into needs and wants",
+              "Set realistic savings goals",
+              "Use budgeting apps to track progress"
+            ]
+          },
+          {
+            title: "Debt Management",
+            description: "Develop a strategic plan to pay off debts efficiently while maintaining financial stability.",
+            steps: [
+              "List all debts with interest rates",
+              "Prioritize high-interest debts",
+              "Consider debt consolidation options",
+              "Set up automatic payments",
+              "Monitor credit score regularly"
+            ]
+          },
+          {
+            title: "Emergency Fund",
+            description: "Build a safety net to handle unexpected expenses without going into debt.",
+            steps: [
+              "Start with small, regular contributions",
+              "Aim for 3-6 months of expenses",
+              "Keep funds in a separate account",
+              "Only use for true emergencies",
+              "Replenish after withdrawals"
+            ]
+          }
+        ],
+        references: [
+          {
+            title: "Financial Planning Guide",
+            url: "https://www.investopedia.com/financial-planning-4689811",
+            description: "Comprehensive guide to financial planning and management"
+          },
+          {
+            title: "Budgeting Tools",
+            url: "https://www.mint.com",
+            description: "Free budgeting and expense tracking tools"
+          },
+          {
+            title: "Debt Management Resources",
+            url: "https://www.nfcc.org",
+            description: "National Foundation for Credit Counseling resources"
+          },
+          {
+            title: "Investment Education",
+            url: "https://www.bogleheads.org",
+            description: "Investment strategies and education"
+          },
+          {
+            title: "Financial Calculators",
+            url: "https://www.bankrate.com/calculators",
+            description: "Various financial calculators for planning"
+          }
+        ],
+        youtubeQuery: "financial+management+and+debt+relief+strategies",
+        inspirationImage: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        visualizationImage: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        title: "Relationship Problem",
+        description: "Strained relationships can lead to emotional distress. Access tools for healthy communication, rebuilding trust, and working through conflicts.",
+        image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        subtypes: [
+          { name: 'Communication', include: ['Communication Skills'] },
+          { name: 'Trust & Repair', include: ['Trust Building','Conflict Resolution'] },
+          { name: 'All', include: [] }
+        ],
+        solutions: [
+          {
+            title: "Communication Skills",
+            description: "Develop effective communication techniques to express needs and understand your partner better.",
+            steps: [
+              "Practice active listening",
+              "Use 'I' statements instead of 'you' statements",
+              "Express needs clearly and respectfully",
+              "Learn to manage emotional responses",
+              "Schedule regular check-ins with your partner"
+            ]
+          },
+          {
+            title: "Trust Building",
+            description: "Rebuild and maintain trust in your relationship through consistent actions and open communication.",
+            steps: [
+              "Be honest and transparent",
+              "Keep your promises",
+              "Show reliability in small things",
+              "Respect boundaries",
+              "Be patient with the process"
+            ]
+          },
+          {
+            title: "Conflict Resolution",
+            description: "Learn healthy ways to resolve conflicts and strengthen your relationship.",
+            steps: [
+              "Stay calm during disagreements",
+              "Focus on the issue, not the person",
+              "Find common ground",
+              "Take breaks when needed",
+              "Work together on solutions"
+            ]
+          }
+        ],
+        references: [
+          {
+            title: "APA: Healthy Relationships",
+            url: "https://www.apa.org/topics/relationships",
+            description: "American Psychological Association guidance on building healthy relationships"
+          },
+          {
+            title: "The Gottman Institute Blog",
+            url: "https://www.gottman.com/blog/",
+            description: "Research-based articles on communication, trust, and conflict management"
+          },
+          {
+            title: "Family Therapy Overview (NIMH)",
+            url: "https://www.nimh.nih.gov/health/topics/psychotherapies",
+            description: "Evidence-based psychotherapies including family and couples approaches"
+          },
+          {
+            title: "Conflict Resolution Skills (HelpGuide)",
+            url: "https://www.helpguide.org/articles/relationships-communication/conflict-resolution-skills.htm",
+            description: "Practical tips for resolving conflicts constructively"
+          }
+        ],
+        youtubeQuery: "relationship+advice+and+couples+therapy",
+        inspirationImage: "https://images.unsplash.com/photo-1516589091380-5d9e5bdbd0f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        visualizationImage: "https://images.unsplash.com/photo-1516589091380-5d9e5bdbd0f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        title: "Personal Problem",
+        description: "Dealing with internal struggles like self-doubt, anxiety, or sadness? Find encouragement and strategies to overcome personal battles.",
+        image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        subtypes: [
+          { name: 'Self-care', include: ['Self-Care Routine'] },
+          { name: 'Emotions', include: ['Emotional Management'] },
+          { name: 'Growth', include: ['Personal Growth'] },
+          { name: 'All', include: [] }
+        ],
+        solutions: [
+          {
+            title: "Self-Care Routine",
+            description: "Develop a consistent self-care routine to improve mental and emotional well-being.",
+            steps: [
+              "Establish a daily routine",
+              "Practice mindfulness meditation",
+              "Get regular exercise",
+              "Maintain a healthy sleep schedule",
+              "Engage in activities you enjoy"
+            ]
+          },
+          {
+            title: "Emotional Management",
+            description: "Learn techniques to manage emotions and reduce anxiety effectively.",
+            steps: [
+              "Identify emotional triggers",
+              "Practice deep breathing exercises",
+              "Keep a mood journal",
+              "Develop coping strategies",
+              "Seek professional help when needed"
+            ]
+          },
+          {
+            title: "Personal Growth",
+            description: "Focus on personal development and building self-confidence.",
+            steps: [
+              "Set achievable goals",
+              "Celebrate small victories",
+              "Learn new skills",
+              "Build a support network",
+              "Practice positive self-talk"
+            ]
+          }
+        ],
+        references: [
+          {
+            title: "MentalHealth.gov",
+            url: "https://www.mentalhealth.gov/",
+            description: "US government hub for mental health information and support"
+          },
+          {
+            title: "NIMH: Help for Mental Illnesses",
+            url: "https://www.nimh.nih.gov/health/find-help",
+            description: "National Institute of Mental Health: how to find help and treatments"
+          },
+          {
+            title: "Mindfulness Exercises (UCLA Health)",
+            url: "https://www.uclahealth.org/programs/marc/free-guided-meditations/guided-meditations",
+            description: "Free guided meditations and mindfulness resources"
+          },
+          {
+            title: "Psychology Today: Find a Therapist",
+            url: "https://www.psychologytoday.com/us/therapists",
+            description: "Directory to locate licensed therapists near you"
+          }
+        ],
+        youtubeQuery: "mental+health+and+personal+development",
+        inspirationImage: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        visualizationImage: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        title: "Study Problem",
+        description: "School stress and academic pressure can take a toll. Here you'll find tools for better concentration, motivation, and stress relief.",
+        image: "data:image/jpeg;base64,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",
+        subtypes: [
+          { name: 'Techniques', include: ['Study Techniques'] },
+          { name: 'Time', include: ['Time Management'] },
+          { name: 'Stress', include: ['Stress Management'] },
+          { name: 'All', include: [] }
+        ],
+        solutions: [
+          {
+            title: "Study Techniques",
+            description: "Implement effective study methods to improve learning and retention.",
+            steps: [
+              "Use the Pomodoro technique",
+              "Create a study schedule",
+              "Take regular breaks",
+              "Use active recall methods",
+              "Teach others what you learn"
+            ]
+          },
+          {
+            title: "Time Management",
+            description: "Develop better time management skills to balance study and personal life.",
+            steps: [
+              "Create a weekly planner",
+              "Set realistic goals",
+              "Prioritize tasks",
+              "Avoid procrastination",
+              "Review and adjust regularly"
+            ]
+          },
+          {
+            title: "Stress Management",
+            description: "Learn techniques to manage academic stress and maintain well-being.",
+            steps: [
+              "Practice relaxation techniques",
+              "Maintain a healthy lifestyle",
+              "Get enough sleep",
+              "Stay organized",
+              "Seek support when needed"
+            ]
+          }
+        ],
+        references: [
+          {
+            title: "UNC Learning Center: Tips & Tools",
+            url: "https://learningcenter.unc.edu/tips-and-tools/",
+            description: "Comprehensive study strategies, note-taking, test prep, and more"
+          },
+          {
+            title: "Cornell Note-Taking System",
+            url: "https://lsc.cornell.edu/how-to-study/taking-notes/cornell-note-taking-system/",
+            description: "Official guide to the Cornell method for effective notes"
+          },
+          {
+            title: "Pomodoro Technique (Official)",
+            url: "https://francescocirillo.com/pages/pomodoro-technique",
+            description: "Time management framework to focus and reduce procrastination"
+          },
+          {
+            title: "APA: How to Study Effectively",
+            url: "https://www.apa.org/ed/precollege/psn/2020/09/study-smart",
+            description: "Research-based tips to make studying more effective"
+          }
+        ],
+        youtubeQuery: "study+techniques+and+academic+success",
+        inspirationImage: "https://images.unsplash.com/photo-1503676260728-1c601da9a5e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        visualizationImage: "https://images.unsplash.com/photo-1503676260728-1c601da9a5e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      },
+      {
+        title: "Health Problem",
+        description: "Your health matters — both mental and physical. Explore well-rounded guides to living healthier and happier every day.",
+        image: "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        subtypes: [
+          { name: 'Physical', include: ['Physical Health'] },
+          { name: 'Mental', include: ['Mental Wellness'] },
+          { name: 'Lifestyle', include: ['Lifestyle Changes'] },
+          { name: 'All', include: [] }
+        ],
+        solutions: [
+          {
+            title: "Physical Health",
+            description: "Develop habits for better physical health and well-being.",
+            steps: [
+              "Exercise regularly",
+              "Eat a balanced diet",
+              "Stay hydrated",
+              "Get enough sleep",
+              "Schedule regular check-ups"
+            ]
+          },
+          {
+            title: "Mental Wellness",
+            description: "Focus on mental health and emotional well-being.",
+            steps: [
+              "Practice mindfulness",
+              "Manage stress effectively",
+              "Build healthy relationships",
+              "Set boundaries",
+              "Seek professional help when needed"
+            ]
+          },
+          {
+            title: "Lifestyle Changes",
+            description: "Make sustainable lifestyle changes for long-term health.",
+            steps: [
+              "Create healthy routines",
+              "Reduce screen time",
+              "Spend time in nature",
+              "Practice gratitude",
+              "Stay socially connected"
+            ]
+          }
+        ],
+        references: [
+          {
+            title: "Mayo Clinic: Nutrition Basics",
+            url: "https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating",
+            description: "Trusted guidance on healthy eating and nutrition"
+          },
+          {
+            title: "Mayo Clinic: Fitness",
+            url: "https://www.mayoclinic.org/healthy-lifestyle/fitness",
+            description: "Exercise advice and workout tips"
+          },
+          {
+            title: "CDC: Physical Activity Basics",
+            url: "https://www.cdc.gov/physicalactivity/basics/index.htm",
+            description: "US CDC recommendations on physical activity"
+          },
+          {
+            title: "Mayo Clinic: Mental Health",
+            url: "https://www.mayoclinic.org/healthy-lifestyle/mental-health",
+            description: "Mental health and wellness topics"
+          }
+        ],
+        youtubeQuery: "health+and+wellness+tips",
+        inspirationImage: "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        visualizationImage: "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+      }
+      ,
+      {
+        title: "Other Problem",
+        description: "Not sure which category fits? Describe your situation and explore tailored tips, resources, and ways to get help.",
+        image: "https://cdn.iconscout.com/icon/premium/png-256-thumb/etc-6286771-5305567.png",
+        subtypes: [
+          { name: 'Clarify', include: ['Clarify the Issue'] },
+          { name: 'Support', include: ['Get Support'] },
+          { name: 'All', include: [] }
+        ],
+        solutions: [
+          {
+            title: "Clarify the Issue",
+            description: "Break down your challenge into smaller parts to identify next actions.",
+            steps: [
+              "Write what's happening in 1–2 sentences",
+              "List what you can control vs not",
+              "Define a realistic next step",
+              "Ask for targeted help if needed",
+              "Review progress in 48 hours"
+            ]
+          },
+          {
+            title: "Get Support",
+            description: "Reach out to trusted people or professionals who can assist.",
+            steps: [
+              "Identify one person to contact",
+              "Draft a short message",
+              "Share specific ask",
+              "Schedule time to talk",
+              "Follow up with notes"
+            ]
+          }
+        ],
+        references: [
+          { title: "Problem-Solving Basics", url: "https://www.mindtools.com/aptiv5n/problem-solving", description: "Structured approaches to solve problems" },
+          { title: "Ask for Help Effectively", url: "https://www.psychologytoday.com/us/blog/ulterior-motives/201311/why-is-it-so-hard-ask-help", description: "How to request help the right way" }
+        ],
+        youtubeQuery: "general+problem+solving+and+support",
+        inspirationImage: "https://images.unsplash.com/photo-1520975922284-85d0c0d7ae3b?auto=format&fit=crop&w=1000&q=80",
+        visualizationImage: "https://images.unsplash.com/photo-1520975922284-85d0c0d7ae3b?auto=format&fit=crop&w=1000&q=80"
+      }
+    ];
+
+    const problemsContainer = document.getElementById("problems");
+
+    problems.forEach((problem, index) => {
+      const card = document.createElement("div");
+      card.className = "problem-card";
+      card.onclick = () => openProblem(index);
+      card.innerHTML = `
+        <img src="${problem.image}" alt="${problem.title}" />
+        <div class="problem-content">
+          <h3>${problem.title}</h3>
+          <p>${problem.description}</p>
+        </div>
+      `;
+      problemsContainer.appendChild(card);
+    });
+
+    function switchAuthTab(which) {
+      const tabLogin = document.getElementById('tabLogin');
+      const tabRegister = document.getElementById('tabRegister');
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+      if (which === 'login') {
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+      } else {
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+        registerForm.style.display = 'block';
+        loginForm.style.display = 'none';
+      }
+    }
+
+    function register() {
+      const username = document.getElementById('regUsername').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      if (!username || !email || !password) {
+        alert('Please fill all fields');
+        return;
+      }
+      const users = JSON.parse(localStorage.getItem('anyhelp_users') || '{}');
+      if (users[username]) {
+        alert('Username already exists');
+        return;
+      }
+      users[username] = { email, password };
+      localStorage.setItem('anyhelp_users', JSON.stringify(users));
+      alert('Account created! You can login now.');
+      switchAuthTab('login');
+      document.getElementById('loginUsername').value = username;
+    }
+
+    function login() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const users = JSON.parse(localStorage.getItem('anyhelp_users') || '{}');
+      if (!users[username] || users[username].password !== password) {
+        alert('Invalid username or password');
+        return;
+      }
+      localStorage.setItem('anyhelp_current_user', username);
+      document.querySelector('.login-page').classList.remove('active');
+      document.querySelector('.dashboard').classList.add('active');
+      revealOnScroll();
+    }
+
+    function openProblem(index) {
+      const problem = problems[index];
+      document.querySelector(".dashboard").classList.remove("active");
+      const problemPage = document.getElementById("problemPage");
+      problemPage.classList.add("active");
+      renderProblemDetails(problem, null);
+    }
+
+    function renderProblemDetails(problem, selectedSubtype) {
+      const filteredSolutions = (() => {
+        if (!selectedSubtype || !selectedSubtype.include || selectedSubtype.include.length === 0) return problem.solutions;
+        const set = new Set(selectedSubtype.include);
+        return problem.solutions.filter(s => set.has(s.title));
+      })();
+
+      let solutionsHTML = filteredSolutions.map(solution => `
+        <div class=\"solution-card\">
+          <h3><i class=\"fas fa-lightbulb\"></i> ${solution.title}</h3>
+          <p>${solution.description}</p>
+          <ul>
+            ${solution.steps.map(step => `
+              <li><i class=\"fas fa-check\"></i> ${step}</li>
+            `).join('')}
+          </ul>
+        </div>
+      `).join('');
+
+      let referencesHTML = problem.references.map(ref => `
+        <div class=\"reference-card\">
+          <h4><i class=\"fas fa-link\"></i> ${ref.title}</h4>
+          <p>${ref.description}</p>
+          <a href=\"${ref.url}\" target=\"_blank\" class=\"reference-link\">View Resource <i class=\"fas fa-external-link-alt\"></i></a>
+        </div>
+      `).join('');
+
+      const subtypeChips = (problem.subtypes || []).map(st => {
+        const active = selectedSubtype && st.name === selectedSubtype.name ? 'active' : '';
+        return `<button class=\"subtype-chip ${active}\" onclick=\"selectSubtype('${problem.title}','${st.name}')\">${st.name}</button>`;
+      }).join('');
+
+      document.getElementById("problemContent").innerHTML = `
+        <h2 style=\"font-size: 2.5rem; margin-bottom: 1.5rem; background: linear-gradient(45deg, #6366f1, #4f46e5); -webkit-background-clip: text; -webkit-text-fill-color: transparent;\">${problem.title}</h2>
+        <div style=\"width: 100%; height: 400px; display: flex; justify-content: center; align-items: center; background-color: rgba(44, 44, 44, 0.5); border-radius: 1.5rem; margin: 1.5rem 0; padding: 1rem;\">
+          <img src=\"${problem.image}\" style=\"max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 1rem;\"/>
+        </div>
+        <p style=\"margin-bottom:1rem; font-size: 1.1rem; line-height: 1.6; color: #bbb;\">${problem.description}</p>
+
+        <div class=\"subtype-section\">
+          <div style=\"font-weight:600\"><i class=\"fas fa-filter\"></i> Choose a subtype</div>
+          <div class=\"subtype-chips\">${subtypeChips}</div>
+          ${!selectedSubtype ? '<div style=\"margin-top:0.75rem; color:#bbb\">Select a subtype to view focused solutions.</div>' : ''}
+        </div>
+
+        ${selectedSubtype ? `
+        <div class=\"solution-section\">
+          <h2><i class=\"fas fa-puzzle-piece\"></i> Solutions</h2>
+          <div class=\"solutions-grid\">
+            ${solutionsHTML}
+          </div>
+        </div>
+
+        <div class=\"references-section\">
+          <h2><i class=\"fas fa-book\"></i> References & Resources</h2>
+          <div class=\"references-grid\">
+            ${referencesHTML}
+          </div>
+        </div>
+
+        <div class=\"video-session\">
+          <p><strong><i class=\"fas fa-video\"></i> Video Sessions</strong> – <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(problem.youtubeQuery + (selectedSubtype ? ('+' + selectedSubtype.name.replace(/\s+/g,'+')) : ''))}" target="_blank" onclick="handleYoutubeClick('${problem.title}')">Watch on YouTube</a></p>
+          <p style="margin-top: 1rem;"><strong><i class="fas fa-user-md"></i> Talk to a Therapist</strong> – <a href="#" onclick="openTherapyPage()">Book 1-1 Session</a></p>
+        </div>
+        ` : ''}
+
+        <div class=\"review-section\">
+          <h2>Rate & Review</h2>
+          <div class=\"rating-stars\">
+            <i class=\"fas fa-star\"></i>
+            <i class=\"fas fa-star\"></i>
+            <i class=\"fas fa-star\"></i>
+            <i class=\"fas fa-star\"></i>
+            <i class=\"fas fa-star\"></i>
+          </div>
+          <textarea id=\"feedbackText\" rows=\"4\" placeholder=\"Write your feedback...\"></textarea>
+          <button onclick=\"submitFeedback()\">Submit Feedback</button>
+        </div>
+        <div class=\"feedback-message\">
+          <i class=\"fas fa-check-circle\"></i>
+          <span>Feedback submitted successfully!</span>
+        </div>
+        <button class=\"back-button\" onclick=\"goBack()\"><i class=\"fas fa-arrow-left\"></i> Back</button>
+      `;
+    }
+
+    function selectSubtype(problemTitle, subtypeName) {
+      const problem = problems.find(p => p.title === problemTitle);
+      const subtype = (problem.subtypes || []).find(s => s.name === subtypeName) || null;
+      renderProblemDetails(problem, subtype);
+    }
+
+    function handleYoutubeClick(problemTitle) {
+      // No external redirects now; keeping hook for future analytics
+      localStorage.setItem('currentProblem', problemTitle);
+      console.log(`Viewing embedded YouTube for ${problemTitle}`);
+    }
+
+    function openTherapyPage() {
+      document.querySelector(".problem-page").classList.remove("active");
+      const therapyPage = document.querySelector(".therapy-page");
+      therapyPage.classList.add("active");
+
+      let therapistHTML = therapists.map(therapist => `
+        <div class="therapist-card">
+          <img src="${therapist.image}" class="therapist-image" alt="${therapist.name}">
+          <div class="therapist-info">
+            <h3>${therapist.name}</h3>
+            <div class="therapist-specialty">${therapist.specialty}</div>
+            <div class="therapist-price">${therapist.price}</div>
+            <p class="therapist-description">${therapist.description}</p>
+            <button class="book-button" onclick="bookSession('${therapist.name}')">Book Session</button>
+          </div>
+        </div>
+      `).join('');
+
+      therapyPage.innerHTML = `
+        <h2 style="font-size: 2.5rem; margin-bottom: 2rem; background: linear-gradient(45deg, #6366f1, #4f46e5); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Available Therapists
+          <button title="Set Razorpay Key" onclick="setRazorpayKey()" style="margin-left: 0.5rem; background: rgba(99,102,241,0.12); color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:0.35rem 0.6rem; font-size:0.8rem; cursor:pointer"><i class="fas fa-gear"></i></button>
+        </h2>
+        <div class="therapists-grid">
+          ${therapistHTML}
+        </div>
+        <button class="back-button" onclick="goBackToProblem()"><i class="fas fa-arrow-left"></i> Back</button>
+      `;
+    }
+
+    function getRazorpayKey() {
+      // Allow user to set at runtime; default to placeholder
+      return localStorage.getItem('anyhelp_razorpay_key') || 'rzp_test_1234567890abcdef';
+    }
+
+    function setRazorpayKey() {
+      const newKey = prompt('Enter Razorpay Test Key (e.g., rzp_test_xxx):', getRazorpayKey());
+      if (newKey) {
+        localStorage.setItem('anyhelp_razorpay_key', newKey.trim());
+        alert('Key saved');
+      }
+    }
+
+    function bookSession(therapistName) {
+      // Parse amount (fallback to 2000 INR if not matched)
+      const therapist = therapists.find(t => t.name === therapistName);
+      let amountInRupees = 2000;
+      if (therapist && therapist.price) {
+        const match = therapist.price.match(/\d+[\,\d]*/);
+        if (match) {
+          amountInRupees = parseInt(match[0].replace(/,/g, ''), 10);
+        }
+      }
+
+      // Open payment selection page with details stored in memory
+      const session = {
+        therapistName,
+        amountInRupees,
+        currency: 'INR',
+        description: `Session with ${therapistName}`
+      };
+      window.anyhelp_current_session = session;
+      showPaymentPage(session);
+    }
+
+    function showPaymentPage(session) {
+      // Hide other pages
+      document.querySelector('.therapy-page').classList.remove('active');
+      document.querySelector('.problem-page').classList.remove('active');
+      document.querySelector('.dashboard').classList.remove('active');
+      // Populate summary
+      const sum = document.getElementById('paymentSummary');
+      if (sum) {
+        sum.textContent = `Paying ₹${session.amountInRupees.toLocaleString('en-IN')} for ${session.description}`;
+      }
+      // Load saved PayPal client id
+      const saved = getPaypalClientId();
+      const input = document.getElementById('paypalClientId');
+      if (input) input.value = saved || '';
+      // Render PayPal buttons if possible
+      renderPaypalButtons();
+      // Show payment page
+      document.getElementById('paymentPage').style.display = 'block';
+    }
+
+    function closePaymentPage() {
+      document.getElementById('paymentPage').style.display = 'none';
+      // Return to therapy page
+      document.querySelector('.therapy-page').classList.add('active');
+    }
+
+    function getPaypalClientId() {
+      return localStorage.getItem('anyhelp_paypal_client_id') || '';
+    }
+
+    function savePaypalClientId() {
+      const cid = (document.getElementById('paypalClientId')?.value || '').trim();
+      if (!cid) { alert('Enter a PayPal Sandbox Client ID'); return; }
+      localStorage.setItem('anyhelp_paypal_client_id', cid);
+      renderPaypalButtons(true);
+      alert('Saved');
+    }
+
+    async function ensurePaypalSdk(clientId) {
+      // Remove any existing loaded SDK to allow dynamic load
+      const id = 'paypal-dynamic-sdk';
+      const old = document.getElementById(id);
+      if (old) old.remove();
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.id = id;
+        s.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=USD`;
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error('Failed to load PayPal SDK'));
+        document.head.appendChild(s);
+      });
+    }
+
+    async function renderPaypalButtons(forceReload = false) {
+      const container = document.getElementById('paypalButtons');
+      if (!container) return;
+      container.innerHTML = '';
+      const clientId = getPaypalClientId();
+      if (!clientId) {
+        const note = document.createElement('div');
+        note.style.color = '#bbb';
+        note.textContent = 'Enter your Sandbox Client ID to enable PayPal';
+        container.appendChild(note);
+        return;
+      }
+      try {
+        await ensurePaypalSdk(clientId);
+        // Use global paypal from dynamically loaded SDK
+        // eslint-disable-next-line no-undef
+        paypal.Buttons({
+          createOrder: (data, actions) => {
+            const s = window.anyhelp_current_session;
+            const amountUsd = Math.max(1, Math.round((s.amountInRupees / 83) * 100) / 100);
+            return actions.order.create({
+              purchase_units: [{ amount: { value: amountUsd.toFixed(2), currency_code: 'USD' }, description: s.description }]
+            });
+          },
+          onApprove: async (data, actions) => {
+            await actions.order.capture();
+            showPaymentSuccess(`PayPal order ${data.orderID} captured.`);
+          },
+          onCancel: () => showPaymentCancel('PayPal checkout was cancelled.'),
+          onError: (err) => showPaymentCancel('PayPal error: ' + err.message)
+        }).render('#paypalButtons');
+      } catch (e) {
+        const note = document.createElement('div');
+        note.style.color = '#ef4444';
+        note.textContent = 'Could not initialize PayPal: ' + e.message;
+        container.appendChild(note);
+      }
+    }
+
+    function payWithRazorpay() {
+      const s = window.anyhelp_current_session;
+      const options = {
+        key: getRazorpayKey(),
+        amount: s.amountInRupees * 100,
+        currency: 'INR',
+        name: 'AnyHelp Therapy Session',
+        description: s.description,
+        theme: { color: '#6366f1' },
+        handler: function (response) {
+          showPaymentSuccess(`Razorpay payment ${response.razorpay_payment_id} successful.`);
+        },
+        modal: { ondismiss: function () {} },
+        retry: { enabled: true, max_count: 1 }
+      };
+      try {
+        if (!window.Razorpay) { alert('Payment SDK failed to load.'); return; }
+        if (!options.key || options.key.includes('123456')) { alert('Set your Razorpay Test Key via gear icon.'); return; }
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function () { showPaymentCancel('Razorpay payment failed.'); });
+        rzp.open();
+      } catch (e) {
+        showPaymentCancel('Could not start Razorpay: ' + e.message);
+      }
+    }
+
+    function simulatePayment(kind) {
+      if (kind === 'success') showPaymentSuccess('Simulated success.');
+      else showPaymentCancel('Simulated failure.');
+    }
+
+    function showPaymentSuccess(msg) {
+      document.getElementById('paymentPage').style.display = 'none';
+      const el = document.getElementById('paymentSuccess');
+      document.getElementById('paymentSuccessMsg').textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function showPaymentCancel(msg) {
+      document.getElementById('paymentPage').style.display = 'none';
+      const el = document.getElementById('paymentCancel');
+      document.getElementById('paymentCancelMsg').textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function goToDashboard() {
+      document.getElementById('paymentSuccess').style.display = 'none';
+      document.getElementById('paymentCancel').style.display = 'none';
+      document.querySelector('.dashboard').classList.add('active');
+    }
+
+    function reopenPayment() {
+      document.getElementById('paymentCancel').style.display = 'none';
+      const s = window.anyhelp_current_session;
+      if (s) showPaymentPage(s);
+      else document.querySelector('.dashboard').classList.add('active');
+    }
+
+    function goBackToProblem() {
+      document.querySelector(".therapy-page").classList.remove("active");
+      document.querySelector(".problem-page").classList.add("active");
+    }
+
+    function goBack() {
+      document.querySelector(".problem-page").classList.remove("active");
+      document.querySelector(".dashboard").classList.add("active");
+    }
+
+    function revealOnScroll() {
+      const cards = document.querySelectorAll('.problem-card');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+
+      cards.forEach(card => {
+        observer.observe(card);
+      });
+    }
+
+    const therapists = [
+      {
+        name: "Dr. Sarah Johnson",
+        specialty: "Clinical Psychologist",
+        price: "₹2,500/session",
+        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        description: "Specialized in cognitive-behavioral therapy with 10+ years of experience helping clients overcome anxiety and depression."
+      },
+      {
+        name: "Michael Chen",
+        specialty: "Relationship Counselor",
+        price: "₹2,000/session",
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        description: "Expert in couples therapy and family counseling, helping relationships thrive through effective communication."
+      },
+      {
+        name: "Dr. Emily Rodriguez",
+        specialty: "Trauma Specialist",
+        price: "₹3,000/session",
+        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        description: "Specialized in trauma recovery and PTSD treatment, using evidence-based approaches for healing."
+      },
+      {
+        name: "James Wilson",
+        specialty: "Life Coach",
+        price: "₹1,800/session",
+        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+        description: "Helping clients achieve personal growth and professional success through strategic life coaching."
+      }
+    ];
+
+    function submitFeedback() {
+      const feedbackMessage = document.querySelector('.feedback-message');
+      feedbackMessage.style.display = 'flex';
+      feedbackMessage.style.alignItems = 'center';
+      
+      setTimeout(() => {
+        feedbackMessage.style.display = 'none';
+      }, 3000);
+    }
+
+    // Chatbot logic
+    let currentProblemIndex = null;
+    const chatbotToggle = document.getElementById('chatbotToggle');
+    const chatbotWidget = document.getElementById('chatbotWidget');
+    const chatbotBody = document.getElementById('chatbotBody');
+
+    function toggleChatbot(show) {
+      if (show) {
+        chatbotWidget.style.display = 'block';
+        chatbotToggle.style.display = 'none';
+      } else {
+        chatbotWidget.style.display = 'none';
+        chatbotToggle.style.display = 'flex';
+      }
+    }
+
+    function showChatbotGreeting(problemTitle) {
+      chatbotBody.innerHTML = '';
+      appendBot(`You're viewing: ${problemTitle}. Select a solution type and tell me what you need help with.`);
+    }
+
+    function appendMsg(text, isUser = false) {
+      const wrap = document.createElement('div');
+      wrap.className = `chatbot-msg ${isUser ? 'user' : 'bot'}`;
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.textContent = text;
+      wrap.appendChild(bubble);
+      chatbotBody.appendChild(wrap);
+      chatbotBody.scrollTop = chatbotBody.scrollHeight;
+    }
+
+    function typeOut(text, cb) {
+      const wrap = document.createElement('div');
+      wrap.className = 'chatbot-msg bot';
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      wrap.appendChild(bubble);
+      chatbotBody.appendChild(wrap);
+      let i = 0;
+      const timer = setInterval(() => {
+        bubble.textContent = text.slice(0, i++);
+        chatbotBody.scrollTop = chatbotBody.scrollHeight;
+        if (i > text.length) { clearInterval(timer); if (cb) cb(); }
+      }, 12);
+    }
+
+    function appendBot(text) { typeOut(text); }
+
+    function getResponseByType(type, message, problem) {
+      const base = problem ? `${problem.title}: ` : '';
+      if (type === 'practical') {
+        return `${base}Here are concrete next steps: 1) Define your immediate goal, 2) Break it into 3 small tasks, 3) Do the first task in 20 minutes, 4) Review what worked, 5) Plan the next block.`;
+      }
+      if (type === 'emotional') {
+        return `${base}I hear you. Try a 4-7-8 breath (inhale 4s, hold 7s, exhale 8s) for 4 rounds, then write one worry and one thing you can do about it today.`;
+      }
+      return `${base}Consider professional support. A licensed expert can help with tailored strategies. You can also book a therapist from this page when ready.`;
+    }
+
+    function sendChat() {
+      const input = document.getElementById('chatInput');
+      const type = document.getElementById('solutionType').value;
+      const text = input.value.trim();
+      if (!text) return;
+      appendMsg(text, true);
+      input.value = '';
+      const problem = currentProblemIndex != null ? problems[currentProblemIndex] : null;
+      const reply = getResponseByType(type, text, problem);
+      appendBot(reply);
+    }
+
+    // Enhance openProblem to enable chatbot
+    const originalOpenProblem = openProblem;
+    openProblem = function(index) {
+      currentProblemIndex = index;
+      originalOpenProblem(index);
+      document.getElementById('chatbotToggle').style.display = 'flex';
+      toggleChatbot(true);
+      showChatbotGreeting(problems[index].title);
+    }
+
+    // Show toggle on dashboard too (collapsed)
+    document.addEventListener('DOMContentLoaded', () => {
+      chatbotToggle.style.display = 'flex';
+      chatbotToggle.onclick = () => toggleChatbot(true);
+    });
+  </script>
+</body>
+
+</html>
